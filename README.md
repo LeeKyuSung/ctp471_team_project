@@ -1,5 +1,9 @@
 # ctp471_team_project
 
+project 1 : Data Collection
+
+project 2 : Data Visualization
+
 
 kyusung's test server
 - ssh server info
