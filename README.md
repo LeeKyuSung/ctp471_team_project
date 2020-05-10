@@ -2,11 +2,9 @@
 
 If you use smart import of eclipse, you can easily build projects.
 
-### project 1 : Data Collection
-
-### project 2 : Data Visualization
-
-
+### project list
+project 1 : Data Collection
+project 2 : Data Visualization
 
 ### Used Tool version
 - eclipse : 2020-03 (4.15.0)
