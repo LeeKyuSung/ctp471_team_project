@@ -38,7 +38,7 @@ public class User {
 		HashSet<String> userSet = null;
 
 		try {
-			String query = "SELECT UserID FROM User WHERE Valid=\"Y\" ORDER BY SearchCnt ASC LIMIT " + num + ";";
+			String query = "SELECT UserID FROM USER WHERE Valid=\"Y\" ORDER BY SearchCnt ASC LIMIT " + num + ";";
 			ResultSet rs = state.executeQuery(query);
 
 			userSet = new HashSet<String>();
@@ -57,7 +57,7 @@ public class User {
 	public void plusSearchCnt(String userID) {
 
 		try {
-			String query = "SELECT SearchCnt FROM User WHERE UserID=\"" + userID + "\";";
+			String query = "SELECT SearchCnt FROM USER WHERE UserID=\"" + userID + "\";";
 			ResultSet rs = state.executeQuery(query);
 
 			if (!rs.next()) {
@@ -67,7 +67,7 @@ public class User {
 
 			int searchCnt = rs.getInt("SearchCnt");
 
-			String updateQuery = "UPDATE User SET SearchCnt=? WHERE UserID=?;";
+			String updateQuery = "UPDATE USER SET SearchCnt=? WHERE UserID=?;";
 			try (PreparedStatement preparedStatement = conn.prepareStatement(updateQuery)) {
 				preparedStatement.setInt(1, searchCnt + 1);
 				preparedStatement.setString(2, userID);
@@ -82,7 +82,7 @@ public class User {
 
 	public void insertOrUpdateUser(String userID, String userInfo) {
 		try {
-			String sql = "INSERT INTO User (`UserID`, `UserInfo`) VALUES ((?), (?)) ON DUPLICATE KEY UPDATE `UserID`=(?), `Userinfo`=(?);";
+			String sql = "INSERT INTO USER (`UserID`, `UserInfo`) VALUES ((?), (?)) ON DUPLICATE KEY UPDATE `UserID`=(?), `Userinfo`=(?);";
 			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 				preparedStatement.setString(1, userID);
 				preparedStatement.setString(2, userInfo);
@@ -100,7 +100,7 @@ public class User {
 		// find friends by name at DB and insert into friendsList field with seq
 		try {
 
-			String selectQuery = "SELECT FriendsList FROM User WHERE UserID=\"" + userID + "\";";
+			String selectQuery = "SELECT FriendsList FROM USER WHERE UserID=\"" + userID + "\";";
 			ResultSet rs = state.executeQuery(selectQuery);
 			if (!rs.next()) {
 				System.out.println("[ERROR][DB][addFriendsList] No userID found.");
@@ -110,7 +110,7 @@ public class User {
 
 			for (int i = 0; i < friend.length; i++) {
 
-				selectQuery = "SELECT Seq FROM User WHERE UserID=\"" + friend[i] + "\";";
+				selectQuery = "SELECT Seq FROM USER WHERE UserID=\"" + friend[i] + "\";";
 				rs = state.executeQuery(selectQuery);
 				if (!rs.next())
 					continue;
@@ -119,7 +119,7 @@ public class User {
 			if ('|' == friendsList.charAt(0))
 				friendsList = friendsList.substring(1);
 
-			String updateQuery = "UPDATE User SET FriendsList=? WHERE UserID=?;";
+			String updateQuery = "UPDATE USER SET FriendsList=? WHERE UserID=?;";
 			try (PreparedStatement preparedStatement = conn.prepareStatement(updateQuery)) {
 				preparedStatement.setString(1, friendsList);
 				preparedStatement.setString(2, userID);
