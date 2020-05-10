@@ -1,4 +1,4 @@
-package util;
+package crawling;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -6,7 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
-public class HTTPConnection {
+public class HTTPUtil {
 
 	public static String sendGet(String targetUrl, HashMap<String, String> options) {
 		try {

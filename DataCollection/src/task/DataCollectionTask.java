@@ -1,19 +1,19 @@
 package task;
 
 import crawling.Crawling;
-import db.DB;
+import db.User;
 
-public class Main {
+public class DataCollectionTask {
 
-	private DB db = null;
 	private Crawling crawling = null;
 
-	public Main() {
-		db = new DB();
+	public DataCollectionTask() {
 		crawling = new Crawling();
 	}
 
 	public void findAndInsertFriends(String userID) {
+		crawling.getFriendsList(userID);
+		
 		db.insertOrUpdateUser(userID, crawling.getUserInfo(userID));
 		db.plusCnt(userID);
 		String[] friend = crawling.getFriendsList(userID);
@@ -23,13 +23,6 @@ public class Main {
 			System.out.println(i + " : " + friend[i]);
 			
 			db.insertOrUpdateUser(friend[i], crawling.getUserInfo(friend[i]));
-
-			try {
-				Thread.sleep(1);
-			} catch (Exception e) {
-				System.out.println("[ERROR][Main][findAndInsertFriends] " + e.getMessage());
-				e.printStackTrace();
-			}
 		}
 	}
 	public void selectUserFromDBAndInsertFriends(int limit) {
@@ -41,8 +34,8 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		Main m = new Main();
-		//m.findAndInsertFriends("ks5050577");
-		m.selectUserFromDBAndInsertFriends(31);
+		DataCollectionTask task = new DataCollectionTask();
+		//task.findAndInsertFriends("ks5050577");
+		task.selectUserFromDBAndInsertFriends(31);
 	}
 }
