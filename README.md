@@ -3,7 +3,7 @@
 If you use smart import of eclipse, you can easily build projects.
 
 ### project list
-project 1 : Data Collection
+project 1 : Data Collection  
 project 2 : Data Visualization
 
 ### Used Tool version
