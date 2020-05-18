@@ -110,19 +110,32 @@ public class User {
 			return;
 		}
 
+		int insertedCnt = 0;
 		for (int i = 0; i < user.length; i++) {
 			try {
+				String query = "SELECT UserID FROM USER WHERE UserID=\"" + user[i] + "\";";
+				ResultSet rs = state.executeQuery(query);
+				if (rs.next()) {
+					// if exist continue
+					continue;
+				}
+
 				String sql = "INSERT INTO USER (`UserID`) VALUES (?);";
 				try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 					preparedStatement.setString(1, user[i]);
 
 					preparedStatement.executeUpdate();
 				}
+
+				insertedCnt++;
+
 			} catch (Exception e) {
 				System.out.println("[ERROR][User][insertUsers][" + i + "][" + user[i] + "] " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
+
+		System.out.println("[User][inserUsers] " + insertedCnt + " inserted from " + user.length + " input.");
 	}
 
 	public void updateFriendsList(String userID, String[] friend) {
@@ -130,7 +143,7 @@ public class User {
 			System.out.println("[ERROR][User][updateFriendsList] input friend array is null or 0");
 			return;
 		}
-		
+
 		try {
 			// make friendsListStr : seq is combine by |
 			String friendsListStr = "";
