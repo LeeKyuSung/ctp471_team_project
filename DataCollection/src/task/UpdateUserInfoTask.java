@@ -40,6 +40,12 @@ public class UpdateUserInfoTask {
 		HashSet<String> targetUserSet = User.getInstance().getUserToUpdateUserInfo(limit);
 
 		for (String targetUser : targetUserSet) {
+			try {
+				Thread.sleep(5000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			System.out.println("[TARGET][" + targetUser + "]");
 			updateUserInfo(targetUser);
 		}

@@ -1,7 +1,11 @@
 package conf;
 
 public class Config {
+	public static final String CRAWLING_CHROME = "driver\\chromedriver.exe";
+	public static final String CRAWLING_FIREFOX = "/home/ctp471/prj/geckodriver";
 	public static final String CRAWLING_TARGET = "https://www.facebook.com/";
+	public static final String CRAWLING_FACEBOOK_ID = "ks5050577@nate.com";
+	public static final String CRAWLING_FACEBOOK_PWD = "CTP471ctp471!";
 	public static final int CRAWLING_INTERVAL_TIME = 10000; // 10 seconds between requests to facebook
 
 	public static final String DB_HOST = "211.231.80.215";

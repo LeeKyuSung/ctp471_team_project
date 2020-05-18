@@ -15,15 +15,15 @@ public class Crawling {
 
 	private final String baseUrl = Config.CRAWLING_TARGET;
 	private WebDriver driver; // 1. chrome (at window local test)
-	// private FirfoxDriver driver; // 2. firefox (at linux test server)
+	// private FirefoxDriver driver; // 2. firefox (at linux test server)
 
 	private Crawling() {
 		// 1. chrome (at window local test)
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\LeeKyuSung\\Desktop\\chromedriver_win32 (1)\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", Config.CRAWLING_CHROME);
 		driver = new ChromeDriver();
 
 		// 2. firefox (at linux test server)
-		// System.setProperty("webdriver.gecko.driver", "/home/ctp471/prj/geckodriver");
+		// System.setProperty("webdriver.gecko.driver", Config.CRAWLING_FIREFOX);
 		// driver = new FirefoxDriver();
 
 		// login to facebook
@@ -36,8 +36,8 @@ public class Crawling {
 
 		WebElement id = driver.findElement(By.id("email"));
 		WebElement pwd = driver.findElement(By.id("pass"));
-		id.sendKeys("ks5050577@nate.com");
-		pwd.sendKeys("CTP471ctp471!");
+		id.sendKeys(Config.CRAWLING_FACEBOOK_ID);
+		pwd.sendKeys(Config.CRAWLING_FACEBOOK_PWD);
 		try {
 			Thread.sleep(5000);
 		} catch (Exception e) {
@@ -64,11 +64,6 @@ public class Crawling {
 	public String[] getUserInfo(String userID) {
 		String targetUrl = baseUrl + userID + "/about";
 		driver.get(targetUrl);
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		List<WebElement> informations = driver.findElements(By.xpath("//*[@class='_c24 _50f4']"));
 
