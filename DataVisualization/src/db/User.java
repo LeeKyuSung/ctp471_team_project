@@ -12,7 +12,7 @@ public class User {
 	private static User instance = new User();
 
 	private final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-	private final String DB_URL = "jdbc:mysql://" + Config.DB_HOST + "/" + Config.DB_DBNAME + "?serverTimezone=UTC";
+	private final String DB_URL = "jdbc:mysql://" + Config.DB_HOST + "/" + Config.DB_DBNAME + "?serverTimezone=UTC&characterEncoding=utf8";
 
 	private Connection conn = null;
 	private Statement state = null;
@@ -38,13 +38,13 @@ public class User {
 		HashMap<Integer, String> userMap = null;
 
 		try {
-			String query = "SELECT Seq, FriendsList FROM USER WHERE Valid=\"Y\";";
+			String query = "SELECT Seq, KAISTFriendsList FROM USER WHERE isFriendsCollected=\"Y\" AND KAISTFriendsNum IS NOT NULL;";
 			ResultSet rs = state.executeQuery(query);
 
 			userMap = new HashMap<Integer, String>();
 			while (rs.next()) {
 				int seq = rs.getInt("Seq");
-				String friendsList = rs.getString("FriendsList");
+				String friendsList = rs.getString("KAISTFriendsList");
 
 				userMap.put(seq, friendsList);
 			}
