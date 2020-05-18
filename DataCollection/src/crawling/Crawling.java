@@ -38,21 +38,24 @@ public class Crawling {
 			e.printStackTrace();
 		}
 
-		WebElement id = driver.findElement(By.id("email"));
-		WebElement pwd = driver.findElement(By.id("pass"));
-		id.sendKeys(Config.CRAWLING_FACEBOOK_ID);
-		pwd.sendKeys(Config.CRAWLING_FACEBOOK_PWD);
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// login if not logined
+		if (!"Facebook".equals(driver.getTitle())) {
+			WebElement id = driver.findElement(By.id("email"));
+			WebElement pwd = driver.findElement(By.id("pass"));
+			id.sendKeys(Config.CRAWLING_FACEBOOK_ID);
+			pwd.sendKeys(Config.CRAWLING_FACEBOOK_PWD);
+			try {
+				Thread.sleep(5000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-		pwd.sendKeys(Keys.RETURN);
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-			e.printStackTrace();
+			pwd.sendKeys(Keys.RETURN);
+			try {
+				Thread.sleep(5000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

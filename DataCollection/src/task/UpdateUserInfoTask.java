@@ -13,10 +13,10 @@ public class UpdateUserInfoTask {
 		System.out.println("[updateUserInfo][" + userID + "][START]");
 
 		String[] userInfo = Crawling.getInstance().getUserInfo(userID);
-		String userInfoStr = "";
 
-		// check KAIST
+		// check KAIST and make userInfoStr
 		boolean isKAIST = false;
+		String userInfoStr = "";
 		for (int i = 0; i < userInfo.length; i++) {
 
 			userInfoStr += "|" + userInfo[i];
@@ -27,11 +27,14 @@ public class UpdateUserInfoTask {
 					break;
 				}
 			}
+		}
+		if (userInfo.length != 0)
+			userInfoStr = userInfoStr.substring(1);
 
-			if (isKAIST) {
-				User.getInstance().updateKAISTUserInfo(userID, userInfoStr.substring(1));
-				break;
-			}
+		if (isKAIST) {
+			User.getInstance().updateUserInfo(userID, "Y", userInfoStr);
+		} else {
+			User.getInstance().updateUserInfo(userID, "N", userInfoStr);
 		}
 
 		System.out.println("[updateUserInfo][" + userID + "][END]");

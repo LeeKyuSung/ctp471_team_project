@@ -196,12 +196,12 @@ public class User {
 		}
 	}
 
-	public void updateKAISTUserInfo(String userID, String userInfoStr) {
+	public void updateUserInfo(String userID, String isKAIST, String userInfoStr) {
 		try {
 			String sql = "UPDATE USER SET isUserInfoUpdated=?, isKAIST=?, UserInfo=? WHERE UserID=?;";
 			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 				preparedStatement.setString(1, "Y");
-				preparedStatement.setString(2, "Y");
+				preparedStatement.setString(2, isKAIST);
 				preparedStatement.setString(3, userInfoStr);
 				preparedStatement.setString(4, userID);
 
