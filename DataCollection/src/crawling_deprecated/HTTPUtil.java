@@ -1,4 +1,4 @@
-package crawling;
+package crawling_deprecated;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

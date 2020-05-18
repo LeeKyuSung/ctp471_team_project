@@ -1,4 +1,4 @@
-package crawling;
+package crawling_deprecated;
 
 import java.util.HashSet;
 import java.util.Iterator;

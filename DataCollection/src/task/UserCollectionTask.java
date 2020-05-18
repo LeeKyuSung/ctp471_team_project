@@ -2,7 +2,7 @@ package task;
 
 import java.util.HashSet;
 
-import crawling.Crawling;
+import crawling_deprecated.Crawling;
 import db.User;
 
 public class UserCollectionTask {

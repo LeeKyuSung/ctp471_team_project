@@ -1,6 +1,6 @@
 package task;
 
-import crawling.Crawling;
+import crawling_deprecated.Crawling;
 import db.User;
 
 public class UpdateUserInfoTask {
