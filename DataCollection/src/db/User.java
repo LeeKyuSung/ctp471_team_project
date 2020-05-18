@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import conf.Config;
@@ -222,6 +223,81 @@ public class User {
 			}
 		} catch (Exception e) {
 			System.out.println("[ERROR][User][updateKAISTUserInfo] " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	public HashMap<String, String> getUserToUpdateKAISTFriends(int limit) {
+		HashMap<String, String> userMap = null;
+
+		try {
+			String query = "SELECT UserID, FriendsList FROM USER WHERE isFriendsCollected=\"Y\" ORDER BY CheckedFriendsPercentage ASC LIMIT " + limit + ";";
+			ResultSet rs = state.executeQuery(query);
+
+			userMap = new HashMap<String, String>();
+			while (rs.next()) {
+				String userID = rs.getString("UserID");
+				String friendsList = rs.getString("FriendsList");
+				userMap.put(userID, friendsList);
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][getUserToUpdateKAISTFriends] " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return userMap;
+	}
+
+	public void updateCheckedFriendsPercentage(String userID, Double checkedFriendsPercentage) {
+		try {
+			String sql = "UPDATE USER SET CheckedFriendsPercentage=? WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+				preparedStatement.setDouble(1, checkedFriendsPercentage);
+				preparedStatement.setString(2, userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][updateNonKAISTUserInfo] " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	public HashMap<String, String> getStatusBySeq(int seq) {
+		HashMap<String, String> result = null;
+
+		try {
+			String query = "SELECT UserID, isFriendsCollected, isUserInfoUpdated, isKAIST FROM USER WHERE Seq=" + seq + ";";
+			ResultSet rs = state.executeQuery(query);
+
+			if (rs.next()) {
+				result = new HashMap<String, String>();
+				result.put("userID", rs.getString("UserID"));
+				result.put("isFriendsCollected", rs.getString("isFriendsCollected"));
+				result.put("isUserInfoUpdated", rs.getString("isUserInfoUpdated"));
+				result.put("isKAIST", rs.getString("isKAIST"));
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][getStatusBySeq] " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public void updateKAISTFriendsList(String userID, String KAISTFriendsListStr, int KAISTFriendsNum, double checkedFriendsPercentage) {
+		try {
+			String sql = "UPDATE USER SET KAISTFriendsList=?, KAISTFriendsNum=?, CheckedFriendsPercentage=? WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+				preparedStatement.setString(1, KAISTFriendsListStr);
+				preparedStatement.setInt(2, KAISTFriendsNum);
+				preparedStatement.setDouble(3, checkedFriendsPercentage);
+				preparedStatement.setString(4, userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][updateKAISTFriendsList] " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

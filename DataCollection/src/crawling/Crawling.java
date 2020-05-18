@@ -6,9 +6,8 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
 
@@ -18,17 +17,17 @@ public class Crawling {
 	private static Crawling instance = new Crawling();
 
 	private final String baseUrl = Config.CRAWLING_TARGET;
-	private WebDriver driver; // 1. chrome (at window local test)
-	// private FirefoxDriver driver; // 2. firefox (at linux test server)
+	// private WebDriver driver; // 1. chrome (at window local test)
+	private FirefoxDriver driver; // 2. firefox (at linux test server)
 
 	private Crawling() {
 		// 1. chrome (at window local test)
-		System.setProperty("webdriver.chrome.driver", Config.CRAWLING_CHROME);
-		driver = new ChromeDriver();
+		// System.setProperty("webdriver.chrome.driver", Config.CRAWLING_CHROME);
+		// driver = new ChromeDriver();
 
 		// 2. firefox (at linux test server)
-		// System.setProperty("webdriver.gecko.driver", Config.CRAWLING_FIREFOX);
-		// driver = new FirefoxDriver();
+		System.setProperty("webdriver.gecko.driver", Config.CRAWLING_FIREFOX);
+		driver = new FirefoxDriver();
 
 		// login to facebook
 		driver.get(baseUrl);
