@@ -1,27 +1,23 @@
 package task;
 
 import java.util.HashSet;
-import java.util.Iterator;
 
 import crawling.Crawling;
 import db.User;
 
-public class DataCollectionTask {
-
+public class UserCollectionTask {
 	private Crawling crawling = null;
 
-	public DataCollectionTask() {
+	public UserCollectionTask() {
 		crawling = new Crawling();
 	}
 
 	public void findAndInsertFriends(String userID) {
 		String[] friend = crawling.getFriendsList(userID);
-		String userInfo = crawling.getUserInfo(userID);
-		
+
 		User.getInstance().plusSearchCnt(userID);
-		User.getInstance().insertOrUpdateUser(userID, userInfo);
 		User.getInstance().addFriendsList(userID, friend);
-		
+
 		for (int i = 0; i < friend.length; i++) {
 			System.out.println(i + " : " + friend[i]);
 
@@ -38,8 +34,12 @@ public class DataCollectionTask {
 	}
 
 	public static void main(String[] args) {
-		DataCollectionTask task = new DataCollectionTask();
-		//task.findAndInsertFriends("ks5050577");
+		UserCollectionTask task = new UserCollectionTask();
+
+		// case 1. find friends of one user
+		// task.findAndInsertFriends("ks5050577");
+
+		// case 2. find users to search from db and find friends of them
 		task.selectUserFromDBAndInsertFriends(3);
 	}
 }

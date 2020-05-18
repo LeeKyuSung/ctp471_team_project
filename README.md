@@ -15,16 +15,41 @@ If you use smart import of eclipse, you can easily build projects.
 - processing : 3.5.4
 
 ### Test server information
-- linux ssh server info : I will gonna add crontab executing Data Collection Project automatically.
+- linux server ssh info : I will gonna add crontab executing Data Collection Project automatically. (TODO)
   - ip : 211.231.80.215
   - id : ctp471
   - pwd : ctp471
+- linux server sftp info : you can download or upload through this
+  - ip : 211.231.80.215 (same as above)
+  - id : ctp471 (same as above)
+  - pwd : ctp471 (same as above)
+  - port : 22
 - db : You can see collected data here.
   - network : MySQL (TCP/IP)
   - Library : libmariadb.dll
-  - ip : 211.231.80.215
-  - id : ctp471
-  - pwd : ctp471
+  - ip : 211.231.80.215 (same as above)
+  - id : ctp471 (same as above)
+  - pwd : ctp471 (same as above)
   - port : 3306
-  
+
+### How to run Task
+- extract DataCollection project to "Runnable JAR File"
+	- Launch configuration : UpdateUserInfoTask, UserCollectionTask or TestTask
+		- it will run main function of the class
+		- choose one from above three.
+	- Export destination : set name of jar file & directory where you make jar file.
+	- Library handling : extract required libraries into generated JAR
+- upload jar file to test server
+	- you can easily run by java command
+		- java -cp {jar file name}.jar task.UpdateUserInfoTask
+		- java -cp {jar file name}.jar task.UserCollectionTask
+		- java -cp {jar file name}.jar task.TestTask
+- crontab : run the task repeatedly. find from google how to use.
+	- (TODO) I will add here after add crontab
+
+### Test Server Task rule (crontab)
+(TODO) I will add here after add crontab
+- UserCollectionTask
+
+- UpdateUserInfoTask
 
