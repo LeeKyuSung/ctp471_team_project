@@ -76,7 +76,7 @@ public class UpdateKAISTFriendsListTask {
 		// step 4 : save KAISTfreindsList, KAISTFriendsNum, CheckedFriendsPercentage
 
 		UpdateKAISTFriendsListTask task = new UpdateKAISTFriendsListTask();
-		int updatedCnt = task.updateKAISTFriendsList(3);
+		int updatedCnt = task.updateKAISTFriendsList(100);
 
 		System.out.println(updatedCnt + " users updated. UpdateKAISTFriendsListTask end.");
 	}
