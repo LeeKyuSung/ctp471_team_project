@@ -56,4 +56,27 @@ public class User {
 		return userMap;
 	}
 
+	public HashMap<Integer, String> getAllUserMap() {
+
+		HashMap<Integer, String> userMap = null;
+
+		try {
+			String query = "SELECT Seq, FriendsList FROM USER WHERE isFriendsCollected=\"Y\";";
+			ResultSet rs = state.executeQuery(query);
+
+			userMap = new HashMap<Integer, String>();
+			while (rs.next()) {
+				int seq = rs.getInt("Seq");
+				String friendsList = rs.getString("FriendsList");
+
+				userMap.put(seq, friendsList);
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][getUserList] " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return userMap;
+	}
+
 }
