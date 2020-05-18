@@ -8,4 +8,7 @@ public class Config {
 	public static final String DB_DBNAME = "CTP471";
 	public static final String DB_USER_NAME = "ctp471";
 	public static final String DB_PASSWORD = "ctp471";
+	
+	public static final String[] KAIST_NAME = {"KAIST", "한국과학기술원"};
+	public static final String KAIST_NAME_EXCEPT = "한국과학영재학교";
 }

@@ -10,7 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
 
-// finding frineds task (1 time in 30 minute?)
+// finding frineds task (1 time in 10 minute?)
 // 1. login
 // 2. select user to find from db (maybe 3~5, which is KAIST, which is not found )
 // 3. find friends of the user

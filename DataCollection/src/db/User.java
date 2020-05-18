@@ -13,7 +13,7 @@ public class User {
 	private static User instance = new User();
 
 	private final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-	private final String DB_URL = "jdbc:mysql://" + Config.DB_HOST + "/" + Config.DB_DBNAME + "?serverTimezone=UTC";
+	private final String DB_URL = "jdbc:mysql://" + Config.DB_HOST + "/" + Config.DB_DBNAME + "?serverTimezone=UTC&characterEncoding=utf8";
 
 	private Connection conn = null;
 	private Statement state = null;
@@ -38,7 +38,7 @@ public class User {
 		HashSet<String> userSet = null;
 
 		try {
-			String query = "SELECT UserID FROM USER WHERE Valid=\"Y\" ORDER BY SearchCnt ASC LIMIT " + num + ";";
+			String query = "SELECT UserID FROM USER WHERE isKAIST=\"Y\" AND isFriendsCollected=\"N\" LIMIT " + num + ";";
 			ResultSet rs = state.executeQuery(query);
 
 			userSet = new HashSet<String>();
@@ -80,22 +80,6 @@ public class User {
 		}
 	}
 
-	public void insertOrUpdateUser(String userID, String userInfo) {
-		try {
-			String sql = "INSERT INTO USER (`UserID`, `UserInfo`) VALUES ((?), (?)) ON DUPLICATE KEY UPDATE `UserID`=(?), `Userinfo`=(?);";
-			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-				preparedStatement.setString(1, userID);
-				preparedStatement.setString(2, userInfo);
-				preparedStatement.setString(3, userID);
-				preparedStatement.setString(4, userInfo);
-
-				preparedStatement.executeUpdate();
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
 	public void addFriendsList(String userID, String[] friend) {
 		// find friends by name at DB and insert into friendsList field with seq
 		try {
@@ -129,6 +113,58 @@ public class User {
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+		}
+	}
+
+	public HashSet<String> getUserToUpdateUserInfo(int limit) {
+		HashSet<String> userSet = null;
+
+		try {
+			String query = "SELECT UserID FROM USER WHERE isUserInfoUpdated=\"N\";";
+			ResultSet rs = state.executeQuery(query);
+
+			userSet = new HashSet<String>();
+			while (rs.next()) {
+				String userID = rs.getString("UserID");
+				userSet.add(userID);
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][getUserToUpdateUserInfo] " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return userSet;
+	}
+	
+	public void updateKAISTUserInfo(String userID, String userInfoStr) {
+		try {
+			String sql = "UPDATE USER SET isUserInfoUpdated=?, isKAIST=?, UserInfo=? WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+				preparedStatement.setString(1, "Y");
+				preparedStatement.setString(2, "Y");
+				preparedStatement.setString(3, userInfoStr);
+				preparedStatement.setString(4, userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][updateKAISTUserInfo] " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	public void updateNonKAISTUserInfo(String userID) {
+		try {
+			String sql = "UPDATE USER SET isUserInfoUpdated=? WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+				preparedStatement.setString(1, "Y");
+				preparedStatement.setString(2, userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][updateNonKAISTUserInfo] " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }
