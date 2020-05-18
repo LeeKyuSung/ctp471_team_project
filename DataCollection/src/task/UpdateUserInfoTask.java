@@ -22,10 +22,21 @@ public class UpdateUserInfoTask {
 			userInfoStr += "|" + userInfo[i];
 
 			for (int j = 0; j < Config.KAIST_NAME.length; j++) {
-				if (userInfo[i].contains(Config.KAIST_NAME[j]) && !userInfo[i].contains(Config.KAIST_NAME_EXCEPT)) {
-					isKAIST = true;
-					break;
+				if (userInfo[i].contains(Config.KAIST_NAME[j])) {
+					boolean isExcept = false;
+					for (int k = 0; k < Config.KAIST_NAME_EXCEPT.length; k++) {
+						if (userInfo[i].contains(Config.KAIST_NAME_EXCEPT[k])) {
+							isExcept = true;
+							break;
+						}
+					}
+
+					if (!isExcept) {
+						isKAIST = true;
+						break;
+					}
 				}
+
 			}
 		}
 		if (userInfo.length != 0)
