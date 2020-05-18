@@ -33,53 +33,6 @@ public class User {
 		return instance;
 	}
 
-	public HashSet<String> getUserToSearch(int num) {
-
-		HashSet<String> userSet = null;
-
-		try {
-			String query = "SELECT UserID FROM USER WHERE isKAIST=\"Y\" AND isFriendsCollected=\"N\" LIMIT " + num + ";";
-			ResultSet rs = state.executeQuery(query);
-
-			userSet = new HashSet<String>();
-			while (rs.next()) {
-				String userID = rs.getString("UserID");
-				userSet.add(userID);
-			}
-		} catch (Exception e) {
-			System.out.println("[ERROR][User][getUserToSearch] " + e.getMessage());
-			e.printStackTrace();
-		}
-
-		return userSet;
-	}
-
-	public void plusSearchCnt(String userID) {
-
-		try {
-			String query = "SELECT SearchCnt FROM USER WHERE UserID=\"" + userID + "\";";
-			ResultSet rs = state.executeQuery(query);
-
-			if (!rs.next()) {
-				System.out.println("[ERROR][User][plusSearchCnt] No userID found.");
-				return;
-			}
-
-			int searchCnt = rs.getInt("SearchCnt");
-
-			String updateQuery = "UPDATE USER SET SearchCnt=? WHERE UserID=?;";
-			try (PreparedStatement preparedStatement = conn.prepareStatement(updateQuery)) {
-				preparedStatement.setInt(1, searchCnt + 1);
-				preparedStatement.setString(2, userID);
-
-				preparedStatement.executeUpdate();
-			}
-		} catch (Exception e) {
-			System.out.println("[ERROR][User][plusSearchCnt] " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
 	public void addFriendsList(String userID, String[] friend) {
 		// find friends by name at DB and insert into friendsList field with seq
 		try {
@@ -116,11 +69,103 @@ public class User {
 		}
 	}
 
+	public HashSet<String> getUserToCollectFriends(int limit) {
+		HashSet<String> userSet = null;
+
+		try {
+			String query = "SELECT UserID FROM USER WHERE isKAIST=\"Y\" AND isFriendsCollected=\"N\" LIMIT " + limit + ";";
+			ResultSet rs = state.executeQuery(query);
+
+			userSet = new HashSet<String>();
+			while (rs.next()) {
+				String userID = rs.getString("UserID");
+				userSet.add(userID);
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][getUserToCollectFriends] " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return userSet;
+	}
+
+	public void updateIsFriendsCollected(String userID, String isFriendsCollected) {
+		try {
+			String sql = "UPDATE USER SET isFriendsCollected=? WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+				preparedStatement.setString(1, isFriendsCollected);
+				preparedStatement.setString(2, userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][updateIsFriendsCollected] " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	public void insertUsers(String[] user) {
+		if (user == null || user.length == 0) {
+			System.out.println("[ERROR][User][insertUsers] input user array is null or 0");
+			return;
+		}
+
+		for (int i = 0; i < user.length; i++) {
+			try {
+				String sql = "INSERT INTO USER (`UserID`) VALUES (?);";
+				try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+					preparedStatement.setString(1, user[i]);
+
+					preparedStatement.executeUpdate();
+				}
+			} catch (Exception e) {
+				System.out.println("[ERROR][User][insertUsers][" + i + "][" + user[i] + "] " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void updateFriendsList(String userID, String[] friend) {
+		if (friend == null) {
+			System.out.println("[ERROR][User][updateFriendsList] input friend array is null or 0");
+			return;
+		}
+		
+		try {
+			// make friendsListStr : seq is combine by |
+			String friendsListStr = "";
+			if (friend != null && friend.length != 0) {
+				String selectQuery;
+				ResultSet rs;
+
+				for (int i = 0; i < friend.length; i++) {
+					selectQuery = "SELECT Seq FROM USER WHERE UserID=\"" + friend[i] + "\";";
+					rs = state.executeQuery(selectQuery);
+					if (!rs.next())
+						continue;
+					friendsListStr += "|" + rs.getString("Seq");
+				}
+				friendsListStr = friendsListStr.substring(1);
+			}
+
+			String updateQuery = "UPDATE USER SET FriendsList=?, isFriendsCollected=\"Y\" WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(updateQuery)) {
+				preparedStatement.setString(1, friendsListStr);
+				preparedStatement.setString(2, userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][updateFriendsList] " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	public HashSet<String> getUserToUpdateUserInfo(int limit) {
 		HashSet<String> userSet = null;
 
 		try {
-			String query = "SELECT UserID FROM USER WHERE isUserInfoUpdated=\"N\";";
+			String query = "SELECT UserID FROM USER WHERE isUserInfoUpdated=\"N\" LIMIT " + limit + ";";
 			ResultSet rs = state.executeQuery(query);
 
 			userSet = new HashSet<String>();
@@ -135,7 +180,22 @@ public class User {
 
 		return userSet;
 	}
-	
+
+	public void updateIsUserUpdated(String userID, String isUserInfoUpdated) {
+		try {
+			String sql = "UPDATE USER SET isUserInfoUpdated=? WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+				preparedStatement.setString(1, isUserInfoUpdated);
+				preparedStatement.setString(2, userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][updateNonKAISTUserInfo] " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	public void updateKAISTUserInfo(String userID, String userInfoStr) {
 		try {
 			String sql = "UPDATE USER SET isUserInfoUpdated=?, isKAIST=?, UserInfo=? WHERE UserID=?;";
@@ -149,21 +209,6 @@ public class User {
 			}
 		} catch (Exception e) {
 			System.out.println("[ERROR][User][updateKAISTUserInfo] " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
-
-	public void updateNonKAISTUserInfo(String userID) {
-		try {
-			String sql = "UPDATE USER SET isUserInfoUpdated=? WHERE UserID=?;";
-			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-				preparedStatement.setString(1, "Y");
-				preparedStatement.setString(2, userID);
-
-				preparedStatement.executeUpdate();
-			}
-		} catch (Exception e) {
-			System.out.println("[ERROR][User][updateNonKAISTUserInfo] " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
