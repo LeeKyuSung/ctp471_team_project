@@ -231,7 +231,7 @@ public class User {
 		HashMap<String, String> userMap = null;
 
 		try {
-			String query = "SELECT UserID, FriendsList FROM USER WHERE isFriendsCollected=\"Y\" ORDER BY CheckedFriendsPercentage ASC LIMIT " + limit + ";";
+			String query = "SELECT UserID, FriendsList FROM USER WHERE isFriendsCollected=\"Y\" AND FriendsList IS NOT NULL ORDER BY CheckedFriendsPercentage ASC LIMIT " + limit + ";";
 			ResultSet rs = state.executeQuery(query);
 
 			userMap = new HashMap<String, String>();

@@ -7,4 +7,6 @@ public class Node {
 	public int seq;
 	public Node[] friends;
 	public String friendsStr;
+	
+	public int friendsNum;
 }

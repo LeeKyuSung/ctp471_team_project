@@ -7,6 +7,9 @@ public class ProcessingTest2 extends PApplet {
 	private int width = 1200;
 	private int height = 800;
 
+	private int maxFriendsNum = 0;
+	private Node[] node;
+
 	// The argument passed to main must match the class name
 	public static void main(String[] args) {
 		PApplet.main("ProcessingTest2");
@@ -23,7 +26,7 @@ public class ProcessingTest2 extends PApplet {
 
 		HashMap<Integer, String> userMap = User.getInstance().getAllUserMap();
 
-		Node[] node = new Node[userMap.size()];
+		node = new Node[userMap.size()];
 
 		for (int i = 0; i < node.length; i++) {
 			node[i] = new Node();
@@ -38,28 +41,27 @@ public class ProcessingTest2 extends PApplet {
 		}
 
 		for (int i = 0; i < node.length; i++) {
-			
+
 			String[] friendsList = node[i].friendsStr.split("\\|");
 			Node[] friends = new Node[friendsList.length];
+			node[i].friendsNum = friendsList.length;
 
-			for (int j=0; j<friends.length; j++) {
-				for (int k=0 ;k<node.length; k++) {
+			if (maxFriendsNum < friendsList.length)
+				maxFriendsNum = friendsList.length;
+
+			for (int j = 0; j < friends.length; j++) {
+				for (int k = 0; k < node.length; k++) {
 					if (friendsList[j].equals(node[k].seq + "")) {
 						friends[j] = node[k];
 					}
 				}
 			}
-			
+
 			node[i].friends = friends;
 		}
 
-
-		for (int i=0; i<node.length; i++) {
-
-			stroke(255);
-			circle(node[i].x, node[i].y, 10);
-
-			stroke(100);
+		stroke(40);
+		for (int i = 0; i < node.length; i++) {
 			Node[] friend = node[i].friends;
 			for (int j = 0; j < friend.length; j++) {
 				if (friend[j] != null)
@@ -71,6 +73,11 @@ public class ProcessingTest2 extends PApplet {
 
 	// identical use to draw in Prcessing IDE
 	public void draw() {
-
+		noStroke();
+		for (int i = 0; i < node.length; i++) {
+			float gray = (float) (255.0 * ((float)node[i].friendsNum / (float)maxFriendsNum));
+			fill(gray);
+			circle(node[i].x, node[i].y, 10);
+		}
 	}
 }

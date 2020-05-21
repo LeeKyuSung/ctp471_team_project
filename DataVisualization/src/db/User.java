@@ -61,7 +61,7 @@ public class User {
 		HashMap<Integer, String> userMap = null;
 
 		try {
-			String query = "SELECT Seq, FriendsList FROM USER WHERE isFriendsCollected=\"Y\";";
+			String query = "SELECT Seq, FriendsList FROM USER WHERE isFriendsCollected=\"Y\" AND FriendsList IS NOT NULL;";
 			ResultSet rs = state.executeQuery(query);
 
 			userMap = new HashMap<Integer, String>();
