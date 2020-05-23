@@ -84,7 +84,7 @@ public class UpdateUserInfoTask {
 		// step 4 (if KAIST) : change isUserInfoUpdate=Y, isKAIST=Y, update UserInfo to db
 
 		UpdateUserInfoTask task = new UpdateUserInfoTask();
-		int updatedCnt = task.updateUserInfo(10);
+		int updatedCnt = task.updateUserInfo(20);
 
 		System.out.println(updatedCnt + " users updated. UpdateUserInfoTask end.");
 

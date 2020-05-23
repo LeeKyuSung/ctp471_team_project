@@ -43,12 +43,6 @@ public class Crawling {
 			WebElement pwd = driver.findElement(By.id("pass"));
 			id.sendKeys(Config.CRAWLING_FACEBOOK_ID);
 			pwd.sendKeys(Config.CRAWLING_FACEBOOK_PWD);
-			try {
-				Thread.sleep(5000);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
 			pwd.sendKeys(Keys.RETURN);
 			try {
 				Thread.sleep(5000);
@@ -67,23 +61,32 @@ public class Crawling {
 
 		String targetUrl = baseUrl + userID + "/friends_all";
 		driver.get(targetUrl);
-
-		WebElement ele = driver.findElements(By.xpath("//*[@class='_3c_ _3s-']")).get(0);
-		if (!"모든 친구".equals(ele.getAttribute("name"))) {
-			// case that the user don't open friends list
-			return null;
+		try {
+			Thread.sleep(5000);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		long startTime = System.currentTimeMillis();
 		// start finding friends
-		List<WebElement> friends = driver.findElements(By.xpath("//*[@class='fsl fwb fcb']"));
+		List<WebElement> friends = driver.findElements(By.xpath("//*[@class='bp9cbjyn ue3kfks5 pw54ja7n uo3d90p7 l82x9zwi n1f8r23x rq0escxv j83agx80 bi6gxh9e discj3wi hv4rvrfc ihqw7lf3 dati1w0a gfomwglr']"));
 		int found = friends.size();
 		while (true) {
 			// scroll down
-			Coordinates coordinate = ((Locatable) friends.get(found - 1)).getCoordinates();
-			coordinate.onPage();
-			coordinate.inViewPort();
-			friends = driver.findElements(By.xpath("//*[@class='fsl fwb fcb']"));
+			try {
+				Thread.sleep(500);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			boolean failFlag = false;
+			try {
+				Coordinates coordinate = ((Locatable) friends.get(found - 1)).getCoordinates();
+				coordinate.onPage();
+				coordinate.inViewPort();
+			} catch (Exception e) {
+				failFlag = true;
+			}
+			friends = driver.findElements(By.xpath("//*[@class='bp9cbjyn ue3kfks5 pw54ja7n uo3d90p7 l82x9zwi n1f8r23x rq0escxv j83agx80 bi6gxh9e discj3wi hv4rvrfc ihqw7lf3 dati1w0a gfomwglr']"));
 
 			if (friends.size() > found) {
 				found = friends.size();
@@ -91,11 +94,16 @@ public class Crawling {
 			} else if (System.currentTimeMillis() - startTime > 10000) {
 				// if cannot find more friends for 10 seconds, stop loop
 				break;
+			} else if (failFlag) {
+				found = friends.size();
 			}
 		}
 
 		found = friends.size();
 		System.out.println("[getFriendsList][" + userID + "] crawled : " + found);
+
+		if (found == 0)
+			return null;
 
 		HashSet<String> friendsSet = new HashSet<String>();
 		for (int i = 0; i < found; i++) {
@@ -137,7 +145,8 @@ public class Crawling {
 		String targetUrl = baseUrl + userID + "/about";
 		driver.get(targetUrl);
 
-		List<WebElement> informations = driver.findElements(By.xpath("//*[@class='_c24 _50f4']"));
+		WebElement tmpInfo = driver.findElements(By.xpath("//*[@class='fjf4s8hc tu1s4ah4 f7vcsfb0 k3eq2f2k']")).get(0);
+		List<WebElement> informations = tmpInfo.findElements(By.xpath("//*[@class='oi732d6d ik7dh3pa d2edcug0 qv66sw1b c1et5uql a8c37x1j muag1w35 enqfppq2 jq4qci2q a3bd9o3v knj5qynh oo9gr5id hzawbc8m']"));
 
 		int found = informations.size();
 		String[] ret = new String[found];
