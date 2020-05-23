@@ -1,5 +1,7 @@
 # ctp471_team_project
 
+2020.05.23 it's not working because facebook class tag changed.
+
 If you use smart import of eclipse, you can easily build projects.
 
 ### project list
