@@ -162,10 +162,11 @@ public class User {
 				friendsListStr = friendsListStr.substring(1);
 			}
 
-			String updateQuery = "UPDATE USER SET FriendsList=?, isFriendsCollected=\"Y\" WHERE UserID=?;";
+			String updateQuery = "UPDATE USER SET FriendsList=?, isFriendsCollected=\"Y\", FriendsCnt=? WHERE UserID=?;";
 			try (PreparedStatement preparedStatement = conn.prepareStatement(updateQuery)) {
 				preparedStatement.setString(1, friendsListStr);
-				preparedStatement.setString(2, userID);
+				preparedStatement.setInt(2, friend.length);
+				preparedStatement.setString(3, userID);
 
 				preparedStatement.executeUpdate();
 			}
