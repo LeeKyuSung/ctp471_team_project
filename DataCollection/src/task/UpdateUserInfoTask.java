@@ -2,6 +2,7 @@ package task;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import conf.Config;
@@ -14,35 +15,41 @@ public class UpdateUserInfoTask {
 
 		String[] userInfo = Crawling.getInstance().getUserInfo(userID);
 
-		// check KAIST and make userInfoStr
-		boolean isKAIST = false;
+		if (userInfo == null) {
+			System.out.println("fail!");
+			return;
+		}
+
+		// check college student and make userInfoStr
+		boolean isCollege = false;
 		String userInfoStr = "";
 		for (int i = 0; i < userInfo.length; i++) {
 
 			userInfoStr += "|" + userInfo[i];
 
-			for (int j = 0; j < Config.KAIST_NAME.length; j++) {
-				if (userInfo[i].contains(Config.KAIST_NAME[j])) {
+			HashMap<String, String> collegeName = User.getInstance().getCollegeName();
+			for (String college : collegeName.keySet()) {
+				if (userInfo[i].contains(college)) {
 					boolean isExcept = false;
-					for (int k = 0; k < Config.KAIST_NAME_EXCEPT.length; k++) {
-						if (userInfo[i].contains(Config.KAIST_NAME_EXCEPT[k])) {
+					String[] exception = collegeName.get(college).split(",");
+					for (int j = 0; j < exception.length; j++) {
+						if (userInfo[i].contains(exception[j])) {
 							isExcept = true;
 							break;
 						}
 					}
 
 					if (!isExcept) {
-						isKAIST = true;
+						isCollege = true;
 						break;
 					}
 				}
-
 			}
 		}
 		if (userInfo.length != 0)
 			userInfoStr = userInfoStr.substring(1);
 
-		if (isKAIST) {
+		if (isCollege) {
 			User.getInstance().updateUserInfo(userID, "Y", userInfoStr);
 		} else {
 			User.getInstance().updateUserInfo(userID, "N", userInfoStr);

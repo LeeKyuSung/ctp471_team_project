@@ -180,7 +180,7 @@ public class User {
 		HashSet<String> userSet = null;
 
 		try {
-			String query = "SELECT UserID FROM USER WHERE isUserInfoUpdated=\"N\" LIMIT " + limit + ";";
+			String query = "SELECT UserID FROM USER WHERE isUserInfoUpdated=\"N\" ORDER BY rand() LIMIT " + limit + ";";
 			ResultSet rs = state.executeQuery(query);
 
 			userSet = new HashSet<String>();
@@ -211,19 +211,19 @@ public class User {
 		}
 	}
 
-	public void updateUserInfo(String userID, String isKAIST, String userInfoStr) {
+	public void updateUserInfo(String userID, String isCollege, String userInfoStr) {
 		try {
-			String sql = "UPDATE USER SET isUserInfoUpdated=?, isKAIST=?, UserInfo=? WHERE UserID=?;";
+			String sql = "UPDATE USER SET isUserInfoUpdated=?, isCollege=?, UserInfo=? WHERE UserID=?;";
 			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 				preparedStatement.setString(1, "Y");
-				preparedStatement.setString(2, isKAIST);
+				preparedStatement.setString(2, isCollege);
 				preparedStatement.setString(3, userInfoStr);
 				preparedStatement.setString(4, userID);
 
 				preparedStatement.executeUpdate();
 			}
 		} catch (Exception e) {
-			System.out.println("[ERROR][User][updateKAISTUserInfo] " + e.getMessage());
+			System.out.println("[ERROR][User][updateUserInfo] " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -301,5 +301,26 @@ public class User {
 			System.out.println("[ERROR][User][updateKAISTFriendsList] " + e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	public HashMap<String, String> getCollegeName() {
+		HashMap<String, String> retMap = null;
+
+		try {
+			String query = "SELECT CollegeName, Exception from COLLEGE_NAME;";
+			ResultSet rs = state.executeQuery(query);
+
+			retMap = new HashMap<String, String>();
+			while (rs.next()) {
+				String collegeName = rs.getString("CollegeName");
+				String exception = rs.getString("Exception");
+				retMap.put(collegeName, exception);
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][getCollegeName] " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return retMap;
 	}
 }

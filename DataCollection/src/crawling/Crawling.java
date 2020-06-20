@@ -149,9 +149,16 @@ public class Crawling {
 
 		String targetUrl = baseUrl + userID + "/about";
 		driver.get(targetUrl);
-
-		WebElement tmpInfo = driver.findElements(By.xpath("//*[@class='fjf4s8hc tu1s4ah4 f7vcsfb0 k3eq2f2k']")).get(0);
-		List<WebElement> informations = tmpInfo.findElements(By.xpath("//*[@class='oi732d6d ik7dh3pa d2edcug0 qv66sw1b c1et5uql a8c37x1j muag1w35 enqfppq2 jq4qci2q a3bd9o3v knj5qynh oo9gr5id hzawbc8m']"));
+		
+		List<WebElement> tmpInfo;
+		while (true) {
+			tmpInfo = driver.findElements(By.xpath("//*[@class='fjf4s8hc tu1s4ah4 f7vcsfb0 k3eq2f2k']"));
+			if (tmpInfo==null || tmpInfo.size()==0) {
+				continue;
+			}
+			break;
+		}
+		List<WebElement> informations = tmpInfo.get(0).findElements(By.xpath("//*[@class='oi732d6d ik7dh3pa d2edcug0 qv66sw1b c1et5uql a8c37x1j muag1w35 enqfppq2 jq4qci2q a3bd9o3v knj5qynh oo9gr5id hzawbc8m']"));
 
 		int found = informations.size();
 		String[] ret = new String[found];
