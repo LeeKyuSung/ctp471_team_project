@@ -24,6 +24,8 @@ public class UpdateUserInfoTask {
 		boolean isCollege = false;
 		String userInfoStr = "";
 		for (int i = 0; i < userInfo.length; i++) {
+			if (userInfo[i].trim().equals(""))
+				continue;
 
 			userInfoStr += "|" + userInfo[i];
 
