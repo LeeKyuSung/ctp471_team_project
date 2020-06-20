@@ -33,11 +33,15 @@ public class UpdateUserInfoTask {
 			for (String college : collegeName.keySet()) {
 				if (userInfo[i].contains(college)) {
 					boolean isExcept = false;
-					String[] exception = collegeName.get(college).split(",");
-					for (int j = 0; j < exception.length; j++) {
-						if (userInfo[i].contains(exception[j])) {
-							isExcept = true;
-							break;
+					String tmp = collegeName.get(college);
+					String[] exception = null;
+					if (tmp!=null && !tmp.trim().equals("")) {
+						exception = collegeName.get(college).split(",");
+						for (int j = 0; j < exception.length; j++) {
+							if (userInfo[i].contains(exception[j])) {
+								isExcept = true;
+								break;
+							}
 						}
 					}
 
