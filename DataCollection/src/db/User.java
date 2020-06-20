@@ -74,7 +74,7 @@ public class User {
 		HashSet<String> userSet = null;
 
 		try {
-			String query = "SELECT UserID FROM USER WHERE isKAIST=\"Y\" AND isFriendsCollected=\"N\" LIMIT " + limit + ";";
+			String query = "SELECT UserID FROM USER WHERE isCollege=\"Y\" AND isFriendsCollected=\"N\" ORDER BY rand() LIMIT " + limit + ";";
 			ResultSet rs = state.executeQuery(query);
 
 			userSet = new HashSet<String>();

@@ -50,7 +50,7 @@ public class CollectFriendsTask {
 		String date = dayTime.format(new Date());
 		System.out.println("CollectFriendsTask Start : " + date);
 
-		// step 1 : find users to search from db (isKAIST=Y, isFriendsCollected=N)
+		// step 1 : find users to search from db
 		// step 2 : change isFriendsCollected=Y
 		// for each users {
 		// step 3 : find friends by crawling

@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Coordinates;
 import org.openqa.selenium.interactions.Locatable;
 
@@ -17,17 +18,17 @@ public class Crawling {
 	private static Crawling instance = new Crawling();
 
 	private final String baseUrl = Config.CRAWLING_TARGET;
-	// private WebDriver driver; // 1. chrome (at window local test)
-	private FirefoxDriver driver; // 2. firefox (at linux test server)
+	 private WebDriver driver; // 1. chrome (at window local test)
+	//private FirefoxDriver driver; // 2. firefox (at linux test server)
 
 	private Crawling() {
 		// 1. chrome (at window local test)
-		// System.setProperty("webdriver.chrome.driver", Config.CRAWLING_CHROME);
-		// driver = new ChromeDriver();
+		 System.setProperty("webdriver.chrome.driver", Config.CRAWLING_CHROME);
+		 driver = new ChromeDriver();
 
 		// 2. firefox (at linux test server)
-		System.setProperty("webdriver.gecko.driver", Config.CRAWLING_FIREFOX);
-		driver = new FirefoxDriver();
+		//System.setProperty("webdriver.gecko.driver", Config.CRAWLING_FIREFOX);
+		//driver = new FirefoxDriver();
 
 		// login to facebook
 		driver.get(baseUrl);
@@ -71,6 +72,7 @@ public class Crawling {
 		// start finding friends
 		List<WebElement> friends = driver.findElements(By.xpath("//*[@class='bp9cbjyn ue3kfks5 pw54ja7n uo3d90p7 l82x9zwi n1f8r23x rq0escxv j83agx80 bi6gxh9e discj3wi hv4rvrfc ihqw7lf3 dati1w0a gfomwglr']"));
 		int found = friends.size();
+		
 		while (true) {
 			// scroll down
 			try {
@@ -88,7 +90,10 @@ public class Crawling {
 			}
 			friends = driver.findElements(By.xpath("//*[@class='bp9cbjyn ue3kfks5 pw54ja7n uo3d90p7 l82x9zwi n1f8r23x rq0escxv j83agx80 bi6gxh9e discj3wi hv4rvrfc ihqw7lf3 dati1w0a gfomwglr']"));
 
-			if (friends.size() > found) {
+			if (friends.size() >= 500) {
+				// more then 500 friends collected, stop
+				break;
+			} else if (friends.size() > found) {
 				found = friends.size();
 				startTime = System.currentTimeMillis();
 			} else if (System.currentTimeMillis() - startTime > 10000) {
