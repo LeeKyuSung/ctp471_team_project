@@ -323,4 +323,40 @@ public class User {
 
 		return retMap;
 	}
+
+	public HashMap<String, String> getCollegeUser() {
+		HashMap<String, String> retMap = null;
+
+		try {
+			String query = "SELECT UserID, UserInfo from USER where isCollege=\"Y\" and CollegeName is NULL;";
+			ResultSet rs = state.executeQuery(query);
+
+			retMap = new HashMap<String, String>();
+			while (rs.next()) {
+				String UserID = rs.getString("UserID");
+				String UserInfo = rs.getString("UserInfo");
+				retMap.put(UserID, UserInfo);
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][getCollegeUser] " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return retMap;
+	}
+	
+	public void setCollege(String userID, String college) {
+		try {
+			String sql = "UPDATE USER SET CollegeName=? WHERE UserID=?;";
+			try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
+				preparedStatement.setString(1, college);
+				preparedStatement.setString(2,  userID);
+
+				preparedStatement.executeUpdate();
+			}
+		} catch (Exception e) {
+			System.out.println("[ERROR][User][setCollege] " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 }
