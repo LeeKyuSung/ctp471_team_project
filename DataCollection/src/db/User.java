@@ -359,4 +359,47 @@ public class User {
 			e.printStackTrace();
 		}
 	}
+
+	public HashMap<String, String> getFriendsList(String college) {
+		if (college == "") {
+			HashMap<String, String> retMap = null;
+
+			try {
+				String query = "SELECT Seq, FriendsList from USER;";
+				ResultSet rs = state.executeQuery(query);
+
+				retMap = new HashMap<String, String>();
+				while (rs.next()) {
+					String Seq = rs.getString("Seq");
+					String FriendsList = rs.getString("FriendsList");
+					retMap.put(Seq, FriendsList);
+				}
+			} catch (Exception e) {
+				System.out.println("[ERROR][User][getFriendsList] " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			return retMap;
+		} else {
+			HashMap<String, String> retMap = null;
+
+			try {
+				String query = "SELECT Seq, FriendsList from USER where CollegeName=\"" + college + "\";";
+				ResultSet rs = state.executeQuery(query);
+
+				retMap = new HashMap<String, String>();
+				while (rs.next()) {
+					String Seq = rs.getString("Seq");
+					String FriendsList = rs.getString("FriendsList");
+					retMap.put(Seq, FriendsList);
+				}
+			} catch (Exception e) {
+				System.out.println("[ERROR][User][getFriendsList] " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			return retMap;
+		}
+		
+	}
 }
