@@ -1,10 +1,16 @@
 package task;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+
+import org.jgrapht.alg.scoring.AlphaCentrality;
+import org.jgrapht.alg.scoring.ClosenessCentrality;
+import org.jgrapht.alg.scoring.HarmonicCentrality;
+import org.jgrapht.alg.scoring.ClusteringCoefficient;
+import org.jgrapht.alg.scoring.Coreness;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 import db.User;
 
@@ -21,45 +27,69 @@ public class ExtractGraph {
 			for (int j = 0; j < n; j++)
 				G[i][j] = 0;
 
-		int[] seq = new int[n];
-		int index = 0;
-		for (String key : tmp.keySet())
-			seq[index++] = Integer.parseInt(key);
-
+		SimpleGraph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+		for (int i = 0; i < 50000; i++) {
+			g.addVertex(i + "");
+		}
 		for (String key : tmp.keySet()) {
-			if (tmp.get(key) == null || tmp.get(key).trim().length() == 0)
+			String fl = tmp.get(key);
+			if (fl == null || fl.trim().length() == 0)
 				continue;
-			String[] friendsList = tmp.get(key).split("\\|");
+			String[] friendsList = fl.split("\\|");
 
 			for (int i = 0; i < friendsList.length; i++) {
-				int sequence = Integer.parseInt(friendsList[i]);
-				for (int j = 0; j < seq.length; j++) {
-					if (sequence == seq[j]) {
-						G[Integer.parseInt(key)][j] = 1;
-						G[j][Integer.parseInt(key)] = 1;
-					}
+				String asdf = friendsList[i].trim();
+				if (g.containsVertex(key) && g.containsVertex(asdf) && !g.containsEdge(key, asdf) && !key.equals(asdf)) {
+					g.addEdge(key, asdf);
+					g.addEdge(asdf, key);
+				} else {
+					System.out.print("Wrong!");
 				}
 			}
 		}
-
-		File file = new File("result.txt");
-
-		System.out.println("Start");
-		try {
-			FileWriter fw = new FileWriter(file);
-
-			for (int i = 0; i < n; i++) {
-				for (int j = 0; j < n; j++) {
-					fw.write(G[i][j] + " ");
-				}
-				fw.write("\n");
-				System.out.println("one line complite");
-			}
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		System.out.println();
 		System.out.println("ExtractGraph end.");
+
+		String[] college = { "KAIST", "Seoul", "Korea University", "Yonsei", "성균관대", "한양대", "경희대", "충북대", "홍익대", "Ewha University" };
+		
+		System.out.println("Clustering Coefficient");
+		ClusteringCoefficient c = new ClusteringCoefficient(g);
+		for (int i = 0; i < college.length; i++) {
+			int cnt = 0;
+			double sum = 0;
+			HashMap<String, String> user = User.getInstance().getFriendsList(college[i]);
+			for (String key : user.keySet()) {
+				cnt++;
+				sum += c.getVertexScore(key);
+			}
+			System.out.println(college[i] + " : " + sum / cnt);
+		}
+		
+		System.out.println("Coreness");
+		Coreness c2 = new Coreness(g);
+		for (int i = 0; i < college.length; i++) {
+			int cnt = 0;
+			double sum = 0;
+			HashMap<String, String> user = User.getInstance().getFriendsList(college[i]);
+			for (String key : user.keySet()) {
+				cnt++;
+				sum += c2.getVertexScore(key);
+			}
+			System.out.println(college[i] + " : " + sum / cnt);
+		}
+		
+		System.out.println("AlphaCentrality");
+		AlphaCentrality c3 = new AlphaCentrality(g);
+		for (int i = 0; i < college.length; i++) {
+			int cnt = 0;
+			double sum = 0;
+			HashMap<String, String> user = User.getInstance().getFriendsList(college[i]);
+			for (String key : user.keySet()) {
+				cnt++;
+				sum += c3.getVertexScore(key);
+			}
+			System.out.println(college[i] + " : " + sum / cnt);
+		}
+		
 	}
 }
