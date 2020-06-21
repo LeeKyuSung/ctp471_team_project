@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import db.User;
 
+@Deprecated
 public class UpdateKAISTFriendsListTask {
 	private void updateKAISTFriendsList(String userID, String friendsListStr) {
 		System.out.println("[updateKAISTFriendsList][" + userID + "][START]");

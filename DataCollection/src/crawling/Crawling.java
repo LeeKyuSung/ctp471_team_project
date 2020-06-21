@@ -150,8 +150,12 @@ public class Crawling {
 		String targetUrl = baseUrl + userID + "/about";
 		driver.get(targetUrl);
 		
-		List<WebElement> tmpInfo;
+		long startTime = System.currentTimeMillis();
+		List<WebElement> tmpInfo = null;
 		while (true) {
+			if (System.currentTimeMillis() - startTime > 10000) {
+				return new String[0];
+			}
 			tmpInfo = driver.findElements(By.xpath("//*[@class='fjf4s8hc tu1s4ah4 f7vcsfb0 k3eq2f2k']"));
 			if (tmpInfo==null || tmpInfo.size()==0) {
 				continue;

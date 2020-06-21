@@ -52,7 +52,7 @@ public class UpdateUserInfoTask {
 				}
 			}
 		}
-		if (userInfo.length != 0)
+		if (userInfo.length != 0 && userInfoStr.length()!=0)
 			userInfoStr = userInfoStr.substring(1);
 
 		if (isCollege) {
