@@ -1,6 +1,7 @@
 # ctp471_team_project
 
 2020.05.23 it's not working because facebook class tag changed.
+2020.06.22 it's fixed.
 
 If you use smart import of eclipse, you can easily build projects.
 
@@ -19,22 +20,7 @@ If you use smart import of eclipse, you can easily build projects.
 - processing : 3.5.4
 
 ### Test server information
-- linux server ssh info
-  - ip : 211.231.80.215
-  - id : ctp471
-  - pwd : ctp471
-- linux server sftp info : you can download or upload through this
-  - ip : 211.231.80.215 (same as above)
-  - id : ctp471 (same as above)
-  - pwd : ctp471 (same as above)
-  - port : 22
-- db : You can see collected data here.
-  - network : MySQL (TCP/IP)
-  - Library : libmariadb.dll
-  - ip : 211.231.80.215 (same as above)
-  - id : ctp471 (same as above)
-  - pwd : ctp471 (same as above)
-  - port : 3306
+2020.06.22 information deleted due to project end.
 
 ### How to run Task & Task rule (Data Collection project)
 - extract DataCollection project to "Runnable JAR File"
